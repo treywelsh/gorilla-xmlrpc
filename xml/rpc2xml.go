@@ -36,7 +36,7 @@ func rpcParams2XML(rpc interface{}) (string, error) {
 	for i := 0; i < reflect.ValueOf(rpc).Elem().NumField(); i++ {
 		var xml string
 		buffer += "<param>"
-		xml, err = rpc2XML(reflect.ValueOf(rpc).Elem().Field(i).Interface())
+		xml, err = RPC2XML(reflect.ValueOf(rpc).Elem().Field(i).Interface())
 		buffer += xml
 		buffer += "</param>"
 	}
@@ -44,7 +44,7 @@ func rpcParams2XML(rpc interface{}) (string, error) {
 	return buffer, err
 }
 
-func rpc2XML(value interface{}) (string, error) {
+func RPC2XML(value interface{}) (string, error) {
 	out := "<value>"
 	switch reflect.ValueOf(value).Kind() {
 	case reflect.Int:
@@ -106,7 +106,7 @@ func struct2XML(value interface{}) (out string) {
 		} else {
 			name = field_type.Name
 		}
-		field_value, _ := rpc2XML(field.Interface())
+		field_value, _ := RPC2XML(field.Interface())
 		field_name := fmt.Sprintf("<name>%s</name>", name)
 		out += fmt.Sprintf("<member>%s%s</member>", field_name, field_value)
 	}
@@ -117,7 +117,7 @@ func struct2XML(value interface{}) (out string) {
 func array2XML(value interface{}) (out string) {
 	out += "<array><data>"
 	for i := 0; i < reflect.ValueOf(value).Len(); i++ {
-		item_xml, _ := rpc2XML(reflect.ValueOf(value).Index(i).Interface())
+		item_xml, _ := RPC2XML(reflect.ValueOf(value).Index(i).Interface())
 		out += item_xml
 	}
 	out += "</data></array>"

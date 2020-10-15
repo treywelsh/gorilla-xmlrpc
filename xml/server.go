@@ -84,7 +84,7 @@ func (c *CodecRequest) Method() (string, error) {
 // args is the pointer to the Service.Args structure
 // it gets populated from temporary XML structure
 func (c *CodecRequest) ReadRequest(args interface{}) error {
-	c.err = xml2RPC(c.request.rawxml, args)
+	c.err = XML2RPC(c.request.rawxml, args)
 	return nil
 }
 

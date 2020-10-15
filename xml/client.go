@@ -22,5 +22,5 @@ func DecodeClientResponse(r io.Reader, reply interface{}) error {
 	if err != nil {
 		return FaultSystemError
 	}
-	return xml2RPC(string(rawxml), reply)
+	return XML2RPC(string(rawxml), reply)
 }

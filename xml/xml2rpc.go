@@ -48,7 +48,7 @@ type member struct {
 	Value value  `xml:"value"`
 }
 
-func xml2RPC(xmlraw string, rpc interface{}) error {
+func XML2RPC(xmlraw string, rpc interface{}) error {
 	// Unmarshal raw XML into the temporal structure
 	var ret response
 	decoder := xml.NewDecoder(bytes.NewReader([]byte(xmlraw)))
@@ -63,13 +63,17 @@ func xml2RPC(xmlraw string, rpc interface{}) error {
 	}
 
 	// Structures should have equal number of fields
-	if reflect.TypeOf(rpc).Elem().NumField() != len(ret.Params) {
+	/*if reflect.TypeOf(rpc).Elem().NumField() != len(ret.Params) {
 		return FaultWrongArgumentsNumber
+	}*/
+	min := reflect.TypeOf(rpc).Elem().NumField()
+	if min > len(ret.Params) {
+		min = len(ret.Params)
 	}
 
 	// Now, convert temporal structure into the
 	// passed rpc variable, according to it's structure
-	for i, param := range ret.Params {
+	for i, param := range ret.Params[:min] {
 		field := reflect.ValueOf(rpc).Elem().Field(i)
 		err = value2Field(param.Value, &field)
 		if err != nil {
